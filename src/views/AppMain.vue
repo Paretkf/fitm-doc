@@ -12,7 +12,7 @@
                       @click="showNavMobile = !showNavMobile"
                       />
           <span class="f-1 t-al-center f-w-bold cl-title">
-            GENTLE WOMAN
+            FITM DOCUMENT
           </span>
         </div>
     </div>
