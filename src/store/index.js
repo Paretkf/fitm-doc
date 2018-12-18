@@ -15,7 +15,8 @@ const documentRef = db.ref('documents')
 
 Vue.use(Vuex)
 const state = {
-  documents: []
+  documents: [],
+  scanQRCodeDocuments: []
 }
 
 const getters = {
@@ -52,6 +53,20 @@ const actions = {
     }
     await commit('SET_DOCUMENTS', data)
   },
+  async getScanQRCodeDocuments ({commit}, payload) {
+    let receiveId = payload.split(':;:')
+    let data = []
+    for (let i = 0; i < receiveId.length; i++) {
+      const temp = await documentRef.orderByChild('receiveId').equalTo(receiveId[i]).once('value')
+      const result = temp.val()
+      if (result !== null) {
+        const key = Object.keys(result)[0]
+        data.push(result[key])
+      }
+    }
+    console.log(data)
+    await commit('SET_SCAN_QR_CODE_DOCUMENT', data)
+  },
   async removeDocument ({commit}, payload) {
     const result = await documentRef.child(payload.firebaseId).remove()
     return result
@@ -67,6 +82,9 @@ const mutations = {
   ...firebaseMutations,
   SET_DOCUMENTS (state, payload) {
     state.documents = payload
+  },
+  SET_SCAN_QR_CODE_DOCUMENT (state, payload) {
+    state.scanQRCodeDocuments = payload
   }
 }
 

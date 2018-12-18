@@ -106,7 +106,10 @@ export default {
       }
       let msg = ''
       for (let i = 0; i < this.checkedRows.length; i++) {
-        msg += this.checkedRows[i].receiveId + ':;:'
+        msg += this.checkedRows[i].receiveId
+        if (i !== this.checkedRows.length - 1) {
+          msg += ':;:'
+        }
       }
       this.qr = await generateQRCode(msg)
     },

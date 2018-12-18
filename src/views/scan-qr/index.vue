@@ -1,23 +1,30 @@
 <template>
   <div>
-    <div>
-       <qrcode-stream @decode="onDecode" @init="onInit" :paused="paused" class="qrcode mg-auto"/>
+    <div class="qrcode mg-auto">
+       <qrcode-reader @decode="onDecode" @init="onInit" :paused="paused"/>
     </div>
   </div>
 </template>
 
 <script>
-import { QrcodeStream } from 'vue-qrcode-reader'
+import { QrcodeReader } from 'vue-qrcode-reader'
+import { mapActions } from 'vuex'
 export default {
   data () {
     return {
-      paused: false
+      paused: false,
+      show: true
     }
   },
   components: {
-    QrcodeStream
+    QrcodeReader
   },
   methods: {
+    ...mapActions({
+      setScanQRCodeText: 'setScanQRCodeText',
+      getScanQRCodeDocuments: 'getScanQRCodeDocuments',
+      setLoading: 'style/setLoading'
+    }),
     async onDecode (content) {
       if (content) {
         this.$swal({
@@ -26,15 +33,16 @@ export default {
           text: content
         })
         this.playSound()
-        await this.delayScan(1000)
+        await this.setLoading(true)
+        await this.getScanQRCodeDocuments(content)
+        await this.setLoading(false)
+        this.show = false
+        this.$router.push({ name: 'scan-qr-item' })
+        // await this.setLoading(true)
+        // await this.getScanQRCodeDocuments(content)
+        // await this.setLoading(false)
+        // await this.$router.push({name: 'scan-qr-item'})
       }
-    },
-    delayScan (timeout) {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(this.paused = false)
-        }, timeout)
-      })
     },
     async onInit (promise) {
       try {
@@ -67,7 +75,7 @@ export default {
 .qrcode{
   width:300px;
   height:300px;
-  margin-top: 10vh;
-  border: 3px solid black;
+  /* margin-top: 10vh; */
+  /* border: 3px solid black; */
 }
 </style>
