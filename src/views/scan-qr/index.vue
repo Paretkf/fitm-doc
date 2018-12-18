@@ -65,8 +65,8 @@ export default {
 
 <style scoped>
 .qrcode{
-  width:400px;
-  height:400px;
+  width:300px;
+  height:300px;
   margin-top: 10vh;
   border: 3px solid black;
 }
