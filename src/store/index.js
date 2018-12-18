@@ -52,6 +52,10 @@ const actions = {
     }
     await commit('SET_DOCUMENTS', data)
   },
+  async removeDocument ({commit}, payload) {
+    const result = await documentRef.child(payload.firebaseId).remove()
+    return result
+  },
   bindDocumnetsRef: firebaseAction(({ bindFirebaseRef }) => {
     bindFirebaseRef('documents', documentRef)
   }),

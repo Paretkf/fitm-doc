@@ -22,7 +22,7 @@
   </div>
 
   <div class="nav-bar" v-else>
-    <div class="menu-item cs-pointer" @click="routeTo(m.link, index)" v-for="m in menus" :key="m.link">
+    <div class="menu-item cs-pointer" @click="routeTo(m.link)" v-for="m in menus" :key="m.link">
       <span :class="isActive(m.page)" class="f-s-13px">
         {{m.text}}
       </span>
@@ -54,6 +54,12 @@ export default {
           link: 'gen-qr',
           page: ['gen-qr'],
           text: 'สร้าง QR Code',
+          icon: '2qrcode'
+        },
+        {
+          link: 'scan-qr-code',
+          page: ['scan-qr-code'],
+          text: 'สแกน QR Code',
           icon: '2qrcode'
         },
         {

@@ -12,6 +12,8 @@
           <b-field label="วันที่ได้รับ*">
             <b-datepicker
               placeholder="เลือกวันที่ได้รับเอกสาร"
+              :month-names="monthNames"
+              :day-names="dayNames"
               v-model="newDocument.receiveDate"
               :date-formatter="(date) => { return dateFormat(date) }">
             </b-datepicker>
@@ -21,6 +23,8 @@
           <b-field label="ลงวันที่*">
             <b-datepicker
               placeholder="ลงวันที่เอกสาร"
+              :month-names="monthNames"
+              :day-names="dayNames"
               v-model="newDocument.date"
               :date-formatter="(date) => { return dateFormat(date) }">
             </b-datepicker>
@@ -110,6 +114,8 @@ import moment from 'moment'
 export default {
   data () {
     return {
+      monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฏาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤษจิกายน', 'ธันวาคม'],
+      dayNames: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
       newDocument: {
         user: '',
         receiveDate: null,
