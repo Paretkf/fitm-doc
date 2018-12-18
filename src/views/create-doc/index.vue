@@ -13,8 +13,7 @@
             <b-datepicker
               placeholder="เลือกวันที่ได้รับเอกสาร"
               v-model="newDocument.receiveDate"
-              :date-formatter="(date) => { return dateFormat(date) }"
-              icon="calendar-today">
+              :date-formatter="(date) => { return dateFormat(date) }">
             </b-datepicker>
           </b-field>
         </div>
@@ -23,8 +22,7 @@
             <b-datepicker
               placeholder="ลงวันที่เอกสาร"
               v-model="newDocument.date"
-              :date-formatter="(date) => { return dateFormat(date) }"
-              icon="calendar-today">
+              :date-formatter="(date) => { return dateFormat(date) }">
             </b-datepicker>
           </b-field>
         </div>

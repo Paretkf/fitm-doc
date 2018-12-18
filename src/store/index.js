@@ -44,7 +44,10 @@ const actions = {
     let data = []
     for (const key in rawData) {
       if (rawData.hasOwnProperty(key)) {
-        data.push(rawData[key])
+        data.push({
+          firebaseId: key,
+          ...rawData[key]
+        })
       }
     }
     await commit('SET_DOCUMENTS', data)
