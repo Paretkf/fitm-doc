@@ -2,7 +2,8 @@
   <div>
     <div class="list-item">
       <div class="mg-auto w-fit-content h-fit-content t-al-center ">
-       <qrcode-reader @decode="onDecode" :paused="paused" class="qrcode"/>
+       <qrcode-reader @decode="onDecode" :paused="paused" class="qrcode">
+        </qrcode-reader>
        </div>
     </div>
   </div>
@@ -51,10 +52,10 @@ export default {
 </script>
 
 <style scoped>
-.list-item {
+/* .list-item {
   overflow: auto;
   height: 100vh;
-}
+} */
 .qrcode{
   width: 30vw;
   height: auto;
@@ -65,4 +66,13 @@ export default {
     height: auto;
   }
 }
+/* .list-item {
+  overflow: auto;
+  height: calc(100vh - 60px);
+}
+.qrcode{
+  width:300px;
+  height:300px;
+  border: 3px solid black;
+} */
 </style>

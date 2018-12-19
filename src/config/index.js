@@ -3,7 +3,7 @@ const config = {
   authDomain: 'appqr-code.firebaseapp.com',
   databaseURL: 'https://appqr-code.firebaseio.com',
   projectId: 'appqr-code',
-  storageBucket: 'appqr-code.appspot.com"',
+  storageBucket: 'appqr-code.appspot.com',
   messagingSenderId: '803629769788'
 }
 

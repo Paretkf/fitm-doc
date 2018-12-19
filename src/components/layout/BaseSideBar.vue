@@ -69,14 +69,8 @@ export default {
           icon: '3Status'
         },
         {
-          link: 'upload-doc',
-          page: ['Dashboard'],
-          text: 'เก็บเอกสาร',
-          icon: '4folder'
-        },
-        {
-          link: 'find-upload-doc',
-          page: ['Dashboard'],
+          link: 'save-document',
+          page: ['save-document'],
           text: 'สืบค้นเอกสารย้อนหลัง',
           icon: '5search'
         }

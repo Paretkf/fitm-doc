@@ -8,6 +8,7 @@ import GenQR from '@/views/gen-qr/index'
 import PrintQRCode from '@/views/gen-qr/PrintQRCode'
 import ScanQR from '@/views/scan-qr/index'
 import ScanQRItem from '@/views/scan-qr/ScanItem'
+import SaveDocument from '@/views/save-doc/index'
 Vue.use(Router)
 
 export default new Router({
@@ -51,6 +52,11 @@ export default new Router({
           path: 'scan-qr-item',
           name: 'scan-qr-item',
           component: ScanQRItem
+        },
+        {
+          path: 'save-document',
+          name: 'save-document',
+          component: SaveDocument
         }
       ]
     }
