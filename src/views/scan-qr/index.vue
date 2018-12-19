@@ -1,7 +1,9 @@
 <template>
   <div>
-    <div class="qrcode mg-auto">
-       <qrcode-reader @decode="onDecode" @init="onInit" :paused="paused"/>
+    <div class="list-item">
+      <div class="mg-auto w-fit-content h-fit-content t-al-center ">
+       <qrcode-reader @decode="onDecode" :paused="paused" class="qrcode"/>
+       </div>
     </div>
   </div>
 </template>
@@ -38,29 +40,6 @@ export default {
         await this.setLoading(false)
         this.show = false
         this.$router.push({ name: 'scan-qr-item' })
-        // await this.setLoading(true)
-        // await this.getScanQRCodeDocuments(content)
-        // await this.setLoading(false)
-        // await this.$router.push({name: 'scan-qr-item'})
-      }
-    },
-    async onInit (promise) {
-      try {
-        await promise
-      } catch (error) {
-        if (error.name === 'NotAllowedError') {
-          this.error = 'ERROR: you need to grant camera access permisson'
-        } else if (error.name === 'NotFoundError') {
-          this.error = 'ERROR: no camera on this device'
-        } else if (error.name === 'NotSupportedError') {
-          this.error = 'ERROR: secure context required (HTTPS, localhost)'
-        } else if (error.name === 'NotReadableError') {
-          this.error = 'ERROR: is the camera already in use?'
-        } else if (error.name === 'OverconstrainedError') {
-          this.error = 'ERROR: installed cameras are not suitable'
-        } else if (error.name === 'StreamApiNotSupportedError') {
-          this.error = 'ERROR: Stream API is not supported in this browser'
-        }
       }
     },
     playSound () {
@@ -72,10 +51,18 @@ export default {
 </script>
 
 <style scoped>
+.list-item {
+  overflow: auto;
+  height: 100vh;
+}
 .qrcode{
-  width:300px;
-  height:300px;
-  /* margin-top: 10vh; */
-  /* border: 3px solid black; */
+  width: 30vw;
+  height: auto;
+}
+@media screen and (max-width: 600px) {
+ .qrcode{
+    width: 50vw;
+    height: auto;
+  }
 }
 </style>
