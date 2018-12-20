@@ -9,18 +9,24 @@ require('firebase/storage')
 const { config } = require('@/config')
 firebase.initializeApp(config)
 const storage = firebase.storage().ref()
-
+let provider = new firebase.auth.GoogleAuthProvider()
+provider.setCustomParameters({
+  'display': 'popup'
+})
 const db = firebase.database()
 const documentRef = db.ref('documents')
 const backUpDocumentRef = db.ref('backUpDocuments')
+const userRef = db.ref('users')
 Vue.use(Vuex)
 const state = {
   documents: [],
   scanQRCodeDocuments: [],
-  backupDocuments: []
+  backupDocuments: [],
+  user: {}
 }
 
 const getters = {
+  user: state => state.user
 }
 
 const actions = {
@@ -38,7 +44,73 @@ const actions = {
       status: payload.status,
       note: payload.note
     })
-    console.log(result)
+    return result
+  },
+  async register ({commit}, payload) {
+    let finalResult = {
+      success: 1,
+      message: ''
+    }
+    try {
+      await firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
+    } catch (error) {
+      finalResult.success = 0
+      finalResult.message = error.message
+    }
+    return finalResult
+  },
+  forgotPassword ({commit}, payload) {
+    firebase.auth().sendPasswordResetEmail(payload)
+  },
+  async login ({commit}, payload) {
+    let finalResult = {
+      success: 1,
+      message: ''
+    }
+    try {
+      let result = await firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
+      let userData = {
+        uid: result.user.uid,
+        displayName: result.user.displayName,
+        email: result.user.email,
+        photoURL: result.user.photoURL,
+        roles: 'user'
+      }
+      const temp = await userRef.orderByChild('uid').equalTo(userData.uid).once('value')
+      const userResult = temp.val()
+      if (userResult !== null) {
+        const key = Object.keys(userResult)[0]
+        userData = userResult[key]
+      } else {
+        await userRef.push(userData)
+      }
+      commit('SET_USER', userData)
+    } catch (error) {
+      finalResult.success = 0
+      finalResult.message = 'Email หรือ Password ไม่ถูกต้อง'
+      console.log(error)
+    }
+    return finalResult
+  },
+  loginWithGoogle ({commit}) {
+    firebase.auth().signInWithPopup(provider).then(async (result) => {
+      let userData = {
+        uid: result.user.uid,
+        displayName: result.user.displayName,
+        email: result.user.email,
+        photoURL: result.user.photoURL,
+        roles: 'user'
+      }
+      const temp = await userRef.orderByChild('uid').equalTo(userData.uid).once('value')
+      const userResult = temp.val()
+      if (userResult !== null) {
+        const key = Object.keys(userResult)[0]
+        userData = userResult[key]
+      } else {
+        await userRef.push(userData)
+      }
+      commit('SET_USER', userData)
+    })
   },
   async getDocuments ({commit}, payload) {
     const snapshot = await documentRef.once('value')
@@ -119,6 +191,9 @@ const mutations = {
   },
   SET_BACK_UP_DOCUMENTS (state, payload) {
     state.backupDocuments = payload
+  },
+  SET_USER (state, data) {
+    state.user = data
   }
 }
 

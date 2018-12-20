@@ -24,6 +24,7 @@
 </template>
 <script>
 import NavBar from '@/components/layout/BaseSideBar'
+import { mapState } from 'vuex'
 export default {
   components: {
     NavBar
@@ -36,6 +37,16 @@ export default {
   methods: {
     onChangeRoute () {
       this.showNavMobile = !this.showNavMobile
+    }
+  },
+  computed: {
+    ...mapState({
+      user: state => state.user
+    })
+  },
+  mounted () {
+    if (!this.user.uid) {
+      this.$router.push({ name: 'login' })
     }
   }
 }
