@@ -17,7 +17,12 @@
       </div>
 
     </div>
-    <div class="item-bottom">
+    <div class="item-bottom cl-white cs-pointer" @click="setLogout()">
+      ออกจากระบบ
+       <svg-filler class="mg-l-10px"
+                      :path="`/static/svg/sign-out.svg`"
+                      :fill="colorIconWhite"
+                      width="20px" height="20px"/>
     </div>
   </div>
 
@@ -27,11 +32,17 @@
         {{m.text}}
       </span>
     </div>
+    <div class="menu-item cs-pointer" @click="setLogout()">
+      <span class="f-s-13px cl-white cs-pointer">
+        ออกจากระบบ
+      </span>
+    </div>
   </div>
 </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'NavBar',
   props: ['isMobile'],
@@ -62,17 +73,23 @@ export default {
           text: 'สแกน QR Code',
           icon: '2qrcode'
         },
-        {
-          link: 'doc-status',
-          page: ['Dashboard'],
-          text: 'สถานะเอกสาร',
-          icon: '3Status'
-        },
+        // {
+        //   link: 'doc-status',
+        //   page: ['Dashboard'],
+        //   text: 'สถานะเอกสาร',
+        //   icon: '3Status'
+        // },
         {
           link: 'save-document',
           page: ['save-document'],
           text: 'สืบค้นเอกสารย้อนหลัง',
           icon: '5search'
+        },
+        {
+          link: 'manage-user',
+          page: ['manage-user'],
+          text: 'จัดการผู้ใช้',
+          icon: 'users-solid'
         }
       ]
     }
@@ -80,11 +97,12 @@ export default {
   computed: {
   },
   methods: {
-    logout () {
-      this.setSellsukiAuth('')
-      this.setLogout()
-      this.firebaseLogout()
-      window.location.href = process.env.SELLSUKI_LOGOUT_PORTAL
+    ...mapActions({
+      logout: 'logout'
+    }),
+    setLogout () {
+      this.logout()
+      this.$router.replace({ name: 'login' })
     },
     isActive (menu) {
       if (Array.isArray(menu)) {
@@ -122,7 +140,7 @@ export default {
   color: #989b9e;
 }
 .group-item {
-  height: calc(100vh - 90px);
+  height: calc(100vh - 60px);
 }
 .item-bottom {
   width: 100%;

@@ -22,7 +22,8 @@ const state = {
   documents: [],
   scanQRCodeDocuments: [],
   backupDocuments: [],
-  user: {}
+  user: {},
+  users: []
 }
 
 const getters = {
@@ -30,6 +31,39 @@ const getters = {
 }
 
 const actions = {
+  logout ({commit}) {
+    firebase.auth().signOut().then(() => {
+      commit('LOG_OUT')
+    })
+  },
+  async changeRoles ({commit}, payload) {
+    if (payload.roles !== 'user') {
+      const temp = await userRef.orderByChild('roles').equalTo(payload.roles).once('value')
+      const userResult = temp.val()
+      for (const key in userResult) {
+        await userRef.child(key).update({
+          roles: 'user'
+        })
+      }
+    }
+    await userRef.child(payload.firebaseId).update({
+      roles: payload.roles
+    })
+  },
+  async getAllUsers ({commit}, payload) {
+    const snapshot = await userRef.once('value')
+    const rawData = snapshot.val()
+    let data = []
+    for (const key in rawData) {
+      if (rawData.hasOwnProperty(key)) {
+        data.push({
+          firebaseId: key,
+          ...rawData[key]
+        })
+      }
+    }
+    await commit('SET_USERS', data)
+  },
   async createDocument ({commit}, payload) {
     const result = await documentRef.push({
       user: payload.user,
@@ -76,7 +110,7 @@ const actions = {
         photoURL: result.user.photoURL,
         roles: 'user'
       }
-      const temp = await userRef.orderByChild('uid').equalTo(userData.uid).once('value')
+      const temp = await userRef.orderByChild('email').equalTo(userData.email).once('value')
       const userResult = temp.val()
       if (userResult !== null) {
         const key = Object.keys(userResult)[0]
@@ -101,7 +135,7 @@ const actions = {
         photoURL: result.user.photoURL,
         roles: 'user'
       }
-      const temp = await userRef.orderByChild('uid').equalTo(userData.uid).once('value')
+      const temp = await userRef.orderByChild('email').equalTo(userData.email).once('value')
       const userResult = temp.val()
       if (userResult !== null) {
         const key = Object.keys(userResult)[0]
@@ -192,8 +226,14 @@ const mutations = {
   SET_BACK_UP_DOCUMENTS (state, payload) {
     state.backupDocuments = payload
   },
+  LOG_OUT (state) {
+    state.user = {}
+  },
   SET_USER (state, data) {
     state.user = data
+  },
+  SET_USERS (state, payload) {
+    state.users = payload
   }
 }
 

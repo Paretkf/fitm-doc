@@ -9,6 +9,7 @@ import PrintQRCode from '@/views/gen-qr/PrintQRCode'
 import ScanQR from '@/views/scan-qr/index'
 import ScanQRItem from '@/views/scan-qr/ScanItem'
 import SaveDocument from '@/views/save-doc/index'
+import ManageUser from '@/views/manage-user/index'
 Vue.use(Router)
 
 export default new Router({
@@ -57,6 +58,11 @@ export default new Router({
           path: 'save-document',
           name: 'save-document',
           component: SaveDocument
+        },
+        {
+          path: 'manage-user',
+          name: 'manage-user',
+          component: ManageUser
         }
       ]
     }
