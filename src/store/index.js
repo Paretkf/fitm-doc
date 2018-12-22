@@ -218,7 +218,7 @@ const actions = {
 }
 const mutations = {
   SET_DOCUMENTS (state, payload) {
-    state.documents = payload
+    state.documents = payload.reverse()
   },
   SET_SCAN_QR_CODE_DOCUMENT (state, payload) {
     state.scanQRCodeDocuments = payload

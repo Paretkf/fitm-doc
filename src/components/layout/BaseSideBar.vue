@@ -73,12 +73,12 @@ export default {
           text: 'สแกน QR Code',
           icon: '2qrcode'
         },
-        // {
-        //   link: 'doc-status',
-        //   page: ['Dashboard'],
-        //   text: 'สถานะเอกสาร',
-        //   icon: '3Status'
-        // },
+        {
+          link: 'document-status',
+          page: ['document-status'],
+          text: 'สถานะเอกสาร',
+          icon: '3Status'
+        },
         {
           link: 'save-document',
           page: ['save-document'],
@@ -144,7 +144,7 @@ export default {
 }
 .item-bottom {
   width: 100%;
-  height: 50px;
+  height: 20px;
 }
 .user-img {
   width: 33px;

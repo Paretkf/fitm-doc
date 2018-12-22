@@ -10,6 +10,8 @@ import ScanQR from '@/views/scan-qr/index'
 import ScanQRItem from '@/views/scan-qr/ScanItem'
 import SaveDocument from '@/views/save-doc/index'
 import ManageUser from '@/views/manage-user/index'
+import DocumentStatus from '@/views/doc-status/index'
+
 Vue.use(Router)
 
 export default new Router({
@@ -63,6 +65,11 @@ export default new Router({
           path: 'manage-user',
           name: 'manage-user',
           component: ManageUser
+        },
+        {
+          path: 'document-status',
+          name: 'document-status',
+          component: DocumentStatus
         }
       ]
     }
