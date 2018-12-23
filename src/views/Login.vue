@@ -24,7 +24,7 @@
           <a class="cl-primary" @click="activeModalRegister = true">สมัครสมาชิก</a>
         </div>
         <div class="pd-10px">
-          <div class="button  w-100pct is-info" @click="sendLogin()">เข้าสู่ระบบ</div>
+          <div class="button w-100pct is-info" @click="sendLogin()">เข้าสู่ระบบ</div>
         </div>
         <div class="pd-10px">
           <div class="button is-google w-100pct" @click="loginWithGoogle()">
@@ -115,6 +115,9 @@ export default {
 <style scoped>
 .is-google {
   background-color: #ce4231;
+  color: #ffffff;
+}
+.is-google:hover {
   color: #ffffff;
 }
 .left {
