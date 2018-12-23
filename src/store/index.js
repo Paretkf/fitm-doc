@@ -28,6 +28,9 @@ const state = {
 
 const getters = {
   user: state => state.user,
+  documentReceiveds: state => {
+    return state.documents.filter(doc => doc.status === 'รับเข้า')
+  },
   receiveIdArray: (state) => {
     let result = []
     state.documents.forEach(element => {
@@ -89,6 +92,16 @@ const actions = {
     firebase.auth().signOut().then(() => {
       commit('LOG_OUT')
     })
+  },
+  async changeStatusDocument ({commit}, payload) {
+    let result = []
+    for (let i = 0; i < payload.data.length; i++) {
+      let temp = await documentRef.child(payload.data[i].firebaseId).update({
+        status: payload.status
+      })
+      result.push(temp)
+    }
+    return result
   },
   async changeRoles ({commit}, payload) {
     if (payload.roles !== 'user') {
@@ -236,10 +249,12 @@ const actions = {
       const result = temp.val()
       if (result !== null) {
         const key = Object.keys(result)[0]
-        data.push(result[key])
+        data.push({
+          firebaseId: key,
+          ...result[key]
+        })
       }
     }
-    console.log(data)
     await commit('SET_SCAN_QR_CODE_DOCUMENT', data)
   },
   async removeDocument ({commit}, payload) {

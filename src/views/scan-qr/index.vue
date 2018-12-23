@@ -32,8 +32,7 @@ export default {
       if (content) {
         this.$swal({
           type: 'success',
-          title: 'สำเร็จ',
-          text: content
+          title: 'สำเร็จ'
         })
         this.playSound()
         await this.setLoading(true)

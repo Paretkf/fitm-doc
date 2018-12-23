@@ -35,18 +35,19 @@
             </b-table-column>
 
             <b-table-column field="name" label="สถานะ" :centered="true">
-              <li class="tag is-danger">
+              <li class="tag" :class="docStatus(props.row.status)">
                 {{ props.row.status }}
               </li>
             </b-table-column>
 
-            <b-table-column field="name" label="เสนอคณะบดี" :centered="true">
-             <button>
-               เสนอคณะบดี
-             </button>
-            </b-table-column>
           </template>
       </b-table>
+    </div>
+    <div v-if="scanQRCodeDocuments[0].status === 'รับเข้า'">
+      <button class="w-60pct button is-info" @click="changeStatusAdmin2()">เสนอคณะบดี</button>
+    </div>
+    <div v-else-if="scanQRCodeDocuments[0].status === 'เสนอคณะบดี'">
+      <button class="w-60pct button is-info" @click="changeStatusAdmin3()">ติดต่อห้องภาควิชา</button>
     </div>
   </div>
 </template>
@@ -68,8 +69,44 @@ export default {
   methods: {
     ...mapActions({
       getScanQRCodeDocuments: 'getScanQRCodeDocuments',
-      setLoading: 'style/setLoading'
-    })
+      setLoading: 'style/setLoading',
+      changeStatusDocument: 'changeStatusDocument'
+    }),
+    async changeStatusAdmin2 () {
+      await this.setLoading(true)
+      await this.changeStatusDocument({
+        status: 'เสนอคณะบดี',
+        data: this.scanQRCodeDocuments
+      })
+      await this.setLoading(false)
+      this.$swal({
+        type: 'success',
+        title: 'สำเร็จ'
+      })
+      this.$router.push({ name: 'document-status' })
+    },
+    async changeStatusAdmin3 () {
+      await this.setLoading(true)
+      await this.changeStatusDocument({
+        status: 'ติดต่อห้องภาควิชา',
+        data: this.scanQRCodeDocuments
+      })
+      await this.setLoading(false)
+      this.$swal({
+        type: 'success',
+        title: 'สำเร็จ'
+      })
+      this.$router.push({ name: 'document-status' })
+    },
+    docStatus (status) {
+      if (status === 'รับเข้า') {
+        return 'is-success'
+      } else if (status === 'เสนอคณะบดี') {
+        return 'is-info'
+      } else if (status === 'ติดต่อห้องภาควิชา') {
+        return 'is-danger'
+      }
+    }
   }
 }
 </script>

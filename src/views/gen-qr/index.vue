@@ -37,7 +37,7 @@
             </b-table-column>
 
             <b-table-column field="name" label="สถานะ" :centered="true">
-              <li class="tag is-danger">
+              <li class="tag is-success">
                 {{ props.row.status }}
               </li>
             </b-table-column>
@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import {generateQRCode} from '@/utils/qr-code'
 export default {
   data () {
@@ -85,8 +85,8 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      documents: state => state.documents
+    ...mapGetters({
+      documents: 'documentReceiveds'
     })
   },
   methods: {

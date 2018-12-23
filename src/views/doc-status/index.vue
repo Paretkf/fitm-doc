@@ -35,7 +35,7 @@
             </b-table-column>
 
             <b-table-column field="name" label="สถานะ" :centered="true">
-              <li class="tag is-danger">
+              <li class="tag" :class="docStatus(props.row.status)">
                 {{ props.row.status }}
               </li>
             </b-table-column>
@@ -63,7 +63,16 @@ export default {
       getDocuments: 'getDocuments',
       setLoading: 'style/setLoading',
       removeDocument: 'removeDocument'
-    })
+    }),
+    docStatus (status) {
+      if (status === 'รับเข้า') {
+        return 'is-success'
+      } else if (status === 'เสนอคณะบดี') {
+        return 'is-info'
+      } else if (status === 'ติดต่อห้องภาควิชา') {
+        return 'is-danger'
+      }
+    }
   },
   async mounted () {
     await this.setLoading(true)
