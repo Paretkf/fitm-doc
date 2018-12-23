@@ -35,12 +35,26 @@
       <div class="columns">
         <div class="column">
           <b-field label="เลขที่ได้รับ*">
-            <b-input v-model="newDocument.receiveId" placeholder="เลขที่ได้รับ"></b-input>
+            <!-- <b-input v-model="newDocument.receiveId" placeholder="เลขที่ได้รับ"></b-input> -->
+            <b-autocomplete
+                v-model="newDocument.receiveId"
+                :data="filteredReceiveIdArray"
+                placeholder="เลขที่ได้รับ"
+                @select="option => selected = option">
+                {{filteredReceiveIdArray}}
+            </b-autocomplete>
           </b-field>
         </div>
         <div class="column">
           <b-field label="เลขที่เอกสาร*">
-           <b-input v-model="newDocument.documentId" placeholder="เลขที่เอกสาร"></b-input>
+           <!-- <b-input v-model="newDocument.documentId" placeholder="เลขที่เอกสาร"></b-input> -->
+            <b-autocomplete
+                v-model="newDocument.documentId"
+                :data="filtereDocumentIdArray"
+                placeholder="เลขที่เอกสาร"
+                @select="option => selected = option">
+                {{filtereDocumentIdArray}}
+            </b-autocomplete>
           </b-field>
         </div>
       </div>
@@ -48,12 +62,26 @@
       <div class="columns">
         <div class="column">
           <b-field label="จาก*">
-            <b-input v-model="newDocument.from" placeholder="จาก"></b-input>
+            <!-- <b-input v-model="newDocument.from" placeholder="จาก"></b-input> -->
+            <b-autocomplete
+                v-model="newDocument.from"
+                :data="filteredFromArray"
+                placeholder="จาก"
+                @select="option => selected = option">
+                {{filteredFromArray}}
+            </b-autocomplete>
           </b-field>
         </div>
         <div class="column">
           <b-field label="ถึง*">
-           <b-input v-model="newDocument.to" placeholder="ถึง"></b-input>
+           <!-- <b-input v-model="newDocument.to" placeholder="ถึง"></b-input> -->
+           <b-autocomplete
+                v-model="newDocument.to"
+                :data="filteredToArray"
+                placeholder="ถึง"
+                @select="option => selected = option">
+                {{filteredToArray}}
+            </b-autocomplete>
           </b-field>
         </div>
       </div>
@@ -61,7 +89,14 @@
       <div class="columns">
         <div class="column">
           <b-field label="เรื่อง*">
-            <b-input v-model="newDocument.name" placeholder="เรื่อง"></b-input>
+            <!-- <b-input v-model="newDocument.name" placeholder="เรื่อง"></b-input> -->
+            <b-autocomplete
+                v-model="newDocument.name"
+                :data="filteredNameArray"
+                placeholder="เรื่อง"
+                @select="option => selected = option">
+                {{filteredNameArray}}
+            </b-autocomplete>
           </b-field>
         </div>
       </div>
@@ -69,7 +104,14 @@
       <div class="columns">
         <div class="column">
           <b-field label="การปฏิบัติ">
-            <b-input v-model="newDocument.work" placeholder="การปฏิบัติ"></b-input>
+            <!-- <b-input v-model="newDocument.work" placeholder="การปฏิบัติ"></b-input> -->
+            <b-autocomplete
+                v-model="newDocument.work"
+                :data="filteredWorkArray"
+                placeholder="การปฏิบัติ"
+                @select="option => selected = option">
+                {{filteredWorkArray}}
+            </b-autocomplete>
           </b-field>
         </div>
       </div>
@@ -109,7 +151,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 export default {
   data () {
@@ -133,7 +175,9 @@ export default {
   },
   methods: {
     ...mapActions({
-      createDocument: 'createDocument'
+      createDocument: 'createDocument',
+      getDocuments: 'getDocuments',
+      setLoading: 'style/setLoading'
     }),
     dateFormat (date) {
       return moment(date).format('DD-MM-YYYY')
@@ -143,7 +187,10 @@ export default {
       if (!isvalid) {
         return
       }
+      await this.setLoading(true)
       await this.createDocument(this.newDocument)
+      await this.getDocuments()
+      await this.setLoading(false)
       this.$swal({
         type: 'success',
         title: 'สำเร็จ',
@@ -215,6 +262,69 @@ export default {
       }
       return true
     }
+  },
+  computed: {
+    ...mapGetters({
+      receiveIdArray: 'receiveIdArray',
+      documentIdArray: 'documentIdArray',
+      fromArray: 'fromArray',
+      nameArray: 'nameArray',
+      toArray: 'toArray',
+      workArray: 'workArray'
+    }),
+    filteredReceiveIdArray () {
+      return this.receiveIdArray.filter(doc => {
+        return doc
+          .toString()
+          .toLowerCase()
+          .indexOf(this.newDocument.receiveId.toLowerCase()) >= 0
+      })
+    },
+    filtereDocumentIdArray () {
+      return this.documentIdArray.filter(doc => {
+        return doc
+          .toString()
+          .toLowerCase()
+          .indexOf(this.newDocument.documentId.toLowerCase()) >= 0
+      })
+    },
+    filteredFromArray () {
+      return this.fromArray.filter(doc => {
+        return doc
+          .toString()
+          .toLowerCase()
+          .indexOf(this.newDocument.from.toLowerCase()) >= 0
+      })
+    },
+    filteredToArray () {
+      return this.toArray.filter(doc => {
+        return doc
+          .toString()
+          .toLowerCase()
+          .indexOf(this.newDocument.to.toLowerCase()) >= 0
+      })
+    },
+    filteredNameArray () {
+      return this.nameArray.filter(doc => {
+        return doc
+          .toString()
+          .toLowerCase()
+          .indexOf(this.newDocument.name.toLowerCase()) >= 0
+      })
+    },
+    filteredWorkArray () {
+      return this.workArray.filter(doc => {
+        return doc
+          .toString()
+          .toLowerCase()
+          .indexOf(this.newDocument.work.toLowerCase()) >= 0
+      })
+    }
+  },
+  async mounted () {
+    await this.setLoading(true)
+    await this.getDocuments()
+    await this.setLoading(false)
   }
 }
 </script>

@@ -27,7 +27,61 @@ const state = {
 }
 
 const getters = {
-  user: state => state.user
+  user: state => state.user,
+  receiveIdArray: (state) => {
+    let result = []
+    state.documents.forEach(element => {
+      if (result.findIndex(res => res === element.receiveId) === -1) {
+        result.push(element.receiveId)
+      }
+    })
+    return result
+  },
+  documentIdArray: (state) => {
+    let result = []
+    state.documents.forEach(element => {
+      if (result.findIndex(res => res === element.documentId) === -1) {
+        result.push(element.documentId)
+      }
+    })
+    return result
+  },
+  fromArray: (state) => {
+    let result = []
+    state.documents.forEach(element => {
+      if (result.findIndex(res => res === element.from) === -1) {
+        result.push(element.from)
+      }
+    })
+    return result
+  },
+  nameArray: (state) => {
+    let result = []
+    state.documents.forEach(element => {
+      if (result.findIndex(res => res === element.name) === -1) {
+        result.push(element.name)
+      }
+    })
+    return result
+  },
+  toArray: (state) => {
+    let result = []
+    state.documents.forEach(element => {
+      if (result.findIndex(res => res === element.to) === -1) {
+        result.push(element.to)
+      }
+    })
+    return result
+  },
+  workArray: (state) => {
+    let result = []
+    state.documents.forEach(element => {
+      if (element.work !== '' && (result.findIndex(res => res === element.work) === -1)) {
+        result.push(element.work)
+      }
+    })
+    return result
+  }
 }
 
 const actions = {
