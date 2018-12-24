@@ -11,7 +11,7 @@ import ScanQRItem from '@/views/scan-qr/ScanItem'
 import SaveDocument from '@/views/save-doc/index'
 import ManageUser from '@/views/manage-user/index'
 import DocumentStatus from '@/views/doc-status/index'
-
+import UserDocument from '@/views/user-doc/index'
 Vue.use(Router)
 
 export default new Router({
@@ -70,6 +70,11 @@ export default new Router({
           path: 'document-status',
           name: 'document-status',
           component: DocumentStatus
+        },
+        {
+          path: 'user-doc',
+          name: 'user-doc',
+          component: UserDocument
         }
       ]
     }

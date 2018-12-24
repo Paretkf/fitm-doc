@@ -9,7 +9,7 @@
       <b-table class="f-s-16px"
               :data="users"
               :paginated="true"
-              :per-page="10"
+              :per-page="5"
               :narrowed="true"
               :pagination-simple="false"
               hoverable>
@@ -48,6 +48,15 @@
                                   @click="confirmChangeRoles('root', props.row)">root</b-dropdown-item> -->
               </b-dropdown>
             </b-table-column>
+            <b-table-column field="name" label="ลบ" :centered="true">
+              <svg-filler
+                      @click="confirmRemove(props.row)"
+                      :path="`/static/svg/trash.svg`"
+                      :fill="'#7d8286'"
+                      class="cs-pointer"
+                      v-if="props.row.roles !== 'root'"
+                      width="20px" height="20px"/>
+            </b-table-column>
 
           </template>
       </b-table>
@@ -71,6 +80,7 @@ export default {
     ...mapActions({
       getAllUsers: 'getAllUsers',
       changeRoles: 'changeRoles',
+      removeUser: 'removeUser',
       setLoading: 'style/setLoading'
     }),
     async change (roles, user) {
@@ -81,6 +91,22 @@ export default {
       })
       await this.getAllUsers()
       await this.setLoading(false)
+    },
+    async remove (user) {
+      await this.setLoading(true)
+      await this.removeUser(user.firebaseId)
+      await this.getAllUsers()
+      await this.setLoading(false)
+    },
+    confirmRemove (data) {
+      this.$dialog.confirm({
+        message: `คุณต้องการลบข้อมูลผู้ใช้ ( <b>${data.email} </b> )นี้หรือไม่`,
+        confirmText: 'ยืนยัน',
+        cancelText: 'ยกเลิก',
+        hasIcon: true,
+        type: 'is-danger',
+        onConfirm: () => this.remove(data)
+      })
     },
     confirmChangeRoles (roles, user) {
       this.$dialog.confirm({

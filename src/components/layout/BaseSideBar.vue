@@ -168,12 +168,19 @@ export default {
         }
       ]
     } else if (this.user.roles === 'user') {
+      // file-alt-solid
       this.menus = [
         {
           link: 'document-status',
           page: ['document-status'],
           text: 'สถานะเอกสาร',
           icon: '3Status'
+        },
+        {
+          link: 'user-doc',
+          page: ['user-doc'],
+          text: 'เอกสารที่ได้รับ',
+          icon: 'file-alt-solid'
         }
       ]
     }

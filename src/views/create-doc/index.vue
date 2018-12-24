@@ -31,7 +31,6 @@
           </b-field>
         </div>
       </div>
-
       <div class="columns">
         <div class="column">
           <b-field label="เลขที่ได้รับ*">
@@ -211,7 +210,6 @@ export default {
       }
     },
     validateData () {
-      console.log(this.newDocument)
       if (this.newDocument.receiveDate === null) {
         this.$swal({
           type: 'error',

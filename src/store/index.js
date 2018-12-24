@@ -23,7 +23,8 @@ const state = {
   scanQRCodeDocuments: [],
   backupDocuments: [],
   user: {},
-  users: []
+  users: [],
+  userDocument: []
 }
 
 const getters = {
@@ -103,6 +104,28 @@ const actions = {
     }
     return result
   },
+  async setDocInUser ({commit}, payload) {
+    let result = []
+    for (let i = 0; i < payload.user.length; i++) {
+      let temp = await userRef.child(`${payload.user[i].firebaseId}/documents`).push(payload.document)
+      result.push(temp)
+    }
+    return result
+  },
+  async setUserInDoc ({commit}, payload) {
+    let userEmail = []
+    for (let i = 0; i < payload.user.length; i++) {
+      userEmail.push(payload.user[i].email)
+    }
+    const temp = await backUpDocumentRef.child(`${payload.document.firebaseId}/users`).once('value')
+    const userResult = temp.val()
+    if (userResult !== null) {
+      const key = Object.keys(userResult)[0]
+      userEmail = userEmail.concat(userResult[key])
+    }
+    const result = await backUpDocumentRef.child(`${payload.document.firebaseId}/users`).set(userEmail)
+    return result
+  },
   async changeRoles ({commit}, payload) {
     if (payload.roles !== 'user') {
       const temp = await userRef.orderByChild('roles').equalTo(payload.roles).once('value')
@@ -130,6 +153,21 @@ const actions = {
       }
     }
     await commit('SET_USERS', data)
+  },
+  async getUserDocument ({ commit, state }) {
+    const snapshot = await userRef.child(`${state.user.firebaseId}/documents`).once('value')
+    console.log(state.user.firebaseId)
+    const rawData = snapshot.val()
+    let data = []
+    for (const key in rawData) {
+      if (rawData.hasOwnProperty(key)) {
+        data.push({
+          firebaseId: key,
+          ...rawData[key]
+        })
+      }
+    }
+    await commit('SET_USER_DOCUMENTS', data)
   },
   async createDocument ({commit}, payload) {
     const result = await documentRef.push({
@@ -182,8 +220,10 @@ const actions = {
       if (userResult !== null) {
         const key = Object.keys(userResult)[0]
         userData = userResult[key]
+        userData.firebaseId = key
       } else {
-        await userRef.push(userData)
+        const temp = await userRef.push(userData)
+        userData.firebaseId = temp.key
       }
       commit('SET_USER', userData)
     } catch (error) {
@@ -200,15 +240,18 @@ const actions = {
         displayName: result.user.displayName,
         email: result.user.email,
         photoURL: result.user.photoURL,
-        roles: 'user'
+        roles: 'user',
+        firebaseId: ''
       }
       const temp = await userRef.orderByChild('email').equalTo(userData.email).once('value')
       const userResult = temp.val()
       if (userResult !== null) {
         const key = Object.keys(userResult)[0]
         userData = userResult[key]
+        userData.firebaseId = key
       } else {
-        await userRef.push(userData)
+        const temp = await userRef.push(userData)
+        userData.firebaseId = temp.key
       }
       commit('SET_USER', userData)
     })
@@ -261,13 +304,16 @@ const actions = {
     const result = await documentRef.child(payload.firebaseId).remove()
     return result
   },
+  async removeUser ({commit}, payload) {
+    const result = await userRef.child(payload).remove()
+    return result
+  },
   async createSaveDocument ({ commit }, payload) {
-    const message = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789'
+    const message = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz'
     let name = ''
     for (let i = 0; i < 5; i++) {
       name += message.charAt(Math.floor(Math.random() * message.length))
     }
-    console.log(payload.file)
     await storage.child(`documents/${name}.pdf`).put(payload.file)
     const dowloadUrl = await storage.child(`documents/${name}.pdf`).getDownloadURL()
     const result = await backUpDocumentRef.push({
@@ -286,6 +332,9 @@ const actions = {
   }
 }
 const mutations = {
+  SET_USER_DOCUMENTS (state, payload) {
+    state.userDocument = payload.reverse()
+  },
   SET_DOCUMENTS (state, payload) {
     state.documents = payload.reverse()
   },
@@ -293,7 +342,7 @@ const mutations = {
     state.scanQRCodeDocuments = payload
   },
   SET_BACK_UP_DOCUMENTS (state, payload) {
-    state.backupDocuments = payload
+    state.backupDocuments = payload.reverse()
   },
   LOG_OUT (state) {
     state.user = {}

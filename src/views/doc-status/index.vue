@@ -39,6 +39,15 @@
                 {{ props.row.status }}
               </li>
             </b-table-column>
+
+            <b-table-column field="name" label="ลบ" :centered="true" v-if="user.roles === 'root'">
+              <svg-filler
+                      @click="confirmRemove(props.row)"
+                      :path="`/static/svg/trash.svg`"
+                      :fill="'#7d8286'"
+                      class="cs-pointer"
+                      width="20px" height="20px"/>
+            </b-table-column>
           </template>
       </b-table>
     </div>
@@ -55,7 +64,8 @@ export default {
   },
   computed: {
     ...mapState({
-      documents: state => state.documents
+      documents: state => state.documents,
+      user: state => state.user
     })
   },
   methods: {
@@ -72,6 +82,27 @@ export default {
       } else if (status === 'ติดต่อห้องภาควิชา') {
         return 'is-danger'
       }
+    },
+    async remove (data) {
+      await this.setLoading(true)
+      await this.removeDocument(data)
+      await this.getDocuments()
+      await this.setLoading(false)
+      this.$swal({
+        type: 'success',
+        title: 'สำเร็จ',
+        text: 'ลบข้อมูลสำเร็จ'
+      })
+    },
+    confirmRemove (data) {
+      this.$dialog.confirm({
+        message: `คุณต้องการลบข้อมูลเอกสาร ( <b>${data.name} </b> )นี้หรือไม่`,
+        confirmText: 'ยืนยัน',
+        cancelText: 'ยกเลิก',
+        hasIcon: true,
+        type: 'is-danger',
+        onConfirm: () => this.remove(data)
+      })
     }
   },
   async mounted () {

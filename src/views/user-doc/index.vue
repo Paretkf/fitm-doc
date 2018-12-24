@@ -2,16 +2,12 @@
   <div class="">
     <div class="dp-flex jtf-ct-space-between">
       <div>
-        <span class="page-title is-paddingless is-marginless"> จัดเก็บเอกสาร </span>
-      </div>
-      <div>
-        <div class="button add-btn" @click="activeModalCreate = true">เพิ่ม</div>
-        <input class="search-input pd-5px" type="text" v-model="search"  placeholder="คีย์เวิร์ดสำหรับการค้นหา">
+        <span class="page-title is-paddingless is-marginless"> เอกสารที่ได้รับ </span>
       </div>
     </div>
     <div class="pd-vtc-20px">
       <b-table class="f-s-16px"
-              :data="filterDocuments"
+              :data="userDocument"
               :paginated="true"
               :per-page="10"
               :narrowed="true"
@@ -42,68 +38,33 @@
               <a :href="props.row.dowloadUrl" target="_blank">ดูข้อมูลเอกสาร</a>
             </b-table-column>
 
-            <b-table-column field="name" label="ส่งต่อ" :centered="true">
-              <svg-filler
-                      :path="`/static/svg/mail-bulk.svg`"
-                      :fill="'#7d8286'"
-                      class="cs-pointer"
-                      @click="sendDoc(props.row)"
-                      width="20px" height="20px"/>
-              <!-- mail-bulk -->
-            </b-table-column>
-
           </template>
       </b-table>
     </div>
-    <b-modal :active.sync="activeModalCreate" class="t-al-center">
-      <Create/>
-    </b-modal>
-      <b-modal :active.sync="activeModalSendDoc" class="t-al-center">
-      <SendDocument :document="selectedDoc"/>
-    </b-modal>
   </div>
 </template>
 <script>
-import Create from './Create'
-import SendDocument from './SendDocument'
 import { mapActions, mapState } from 'vuex'
 export default {
-  components: {
-    Create,
-    SendDocument
-  },
   data () {
     return {
-      activeModalCreate: false,
       search: '',
-      selectedDoc: {},
-      activeModalSendDoc: false
+      selectedDoc: {}
     }
   },
   computed: {
     ...mapState({
-      backupDocuments: state => state.backupDocuments
-    }),
-    filterDocuments () {
-      return this.backupDocuments.filter(doc => {
-        return (doc.name).includes(this.search) || doc.date.includes(this.search)
-      })
-    }
+      userDocument: state => state.userDocument,
+      user: state => state.user
+    })
   },
   methods: {
     ...mapActions({
-      getBackUpDocuments: 'getBackUpDocuments',
-      setLoading: 'style/setLoading'
-    }),
-    sendDoc (doc) {
-      this.selectedDoc = doc
-      this.activeModalSendDoc = true
-    }
+      getUserDocument: 'getUserDocument'
+    })
   },
   async mounted () {
-    await this.setLoading(true)
-    await this.getBackUpDocuments()
-    await this.setLoading(false)
+    this.getUserDocument()
   }
 }
 </script>
