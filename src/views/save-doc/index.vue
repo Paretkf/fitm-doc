@@ -51,6 +51,15 @@
                       width="20px" height="20px"/>
               <!-- mail-bulk -->
             </b-table-column>
+             <b-table-column field="name" label="ลบ" :centered="true">
+              <svg-filler
+                      @click="confirmRemove(props.row)"
+                      :path="`/static/svg/trash.svg`"
+                      :fill="'#7d8286'"
+                      class="cs-pointer"
+                      v-if="props.row.roles !== 'root'"
+                      width="20px" height="20px"/>
+            </b-table-column>
 
           </template>
       </b-table>
@@ -93,11 +102,33 @@ export default {
   methods: {
     ...mapActions({
       getBackUpDocuments: 'getBackUpDocuments',
-      setLoading: 'style/setLoading'
+      setLoading: 'style/setLoading',
+      removeSaveDocument: 'removeSaveDocument'
     }),
     sendDoc (doc) {
       this.selectedDoc = doc
       this.activeModalSendDoc = true
+    },
+    async remove (data) {
+      await this.setLoading(true)
+      await this.removeSaveDocument(data)
+      await this.getBackUpDocuments()
+      await this.setLoading(false)
+      this.$swal({
+        type: 'success',
+        title: 'สำเร็จ',
+        text: 'ลบข้อมูลสำเร็จ'
+      })
+    },
+    confirmRemove (data) {
+      this.$dialog.confirm({
+        message: `คุณต้องการลบข้อมูลเอกสาร ( <b>${data.name} </b> )นี้หรือไม่`,
+        confirmText: 'ยืนยัน',
+        cancelText: 'ยกเลิก',
+        hasIcon: true,
+        type: 'is-danger',
+        onConfirm: () => this.remove(data)
+      })
     }
   },
   async mounted () {

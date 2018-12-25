@@ -305,6 +305,10 @@ const actions = {
     const result = await documentRef.child(payload.firebaseId).remove()
     return result
   },
+  async removeSaveDocument ({commit}, payload) {
+    const result = await backUpDocumentRef.child(payload.firebaseId).remove()
+    return result
+  },
   async removeUser ({commit}, payload) {
     const result = await userRef.child(payload).remove()
     return result
