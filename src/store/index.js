@@ -127,13 +127,16 @@ const actions = {
     return result
   },
   async changeRoles ({commit}, payload) {
+    console.log('payload', payload)
     if (payload.roles !== 'user') {
       const temp = await userRef.orderByChild('roles').equalTo(payload.roles).once('value')
       const userResult = temp.val()
-      for (const key in userResult) {
-        await userRef.child(key).update({
-          roles: 'user'
-        })
+      if (userResult !== null) {
+        for (const key in userResult) {
+          await userRef.child(key).update({
+            roles: 'user'
+          })
+        }
       }
     }
     await userRef.child(payload.firebaseId).update({
@@ -240,8 +243,7 @@ const actions = {
         displayName: result.user.displayName,
         email: result.user.email,
         photoURL: result.user.photoURL,
-        roles: 'user',
-        firebaseId: ''
+        roles: 'user'
       }
       const temp = await userRef.orderByChild('email').equalTo(userData.email).once('value')
       const userResult = temp.val()

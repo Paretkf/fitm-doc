@@ -28,6 +28,9 @@
             <b-table-column field="roles" label="สิทธิการเข้าถึง" :centered="true">
               {{ props.row.roles }}
             </b-table-column>
+            <b-table-column field="roles" label="id" :centered="true">
+              {{ props.row.firebaseId }}
+            </b-table-column>
 
             <b-table-column field="edit" label="กำหนดสิทธิเป็น" :centered="true">
               <b-dropdown position="is-bottom-left" class="" v-if="props.row.roles !== 'root'">
