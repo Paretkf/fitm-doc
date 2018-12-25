@@ -4,8 +4,8 @@
       <div>
         <span class="page-title is-paddingless is-marginless"> จัดเก็บเอกสาร </span>
       </div>
-      <div>
-        <div class="button add-btn" @click="activeModalCreate = true">เพิ่ม</div>
+      <div class="dp-flex">
+        <div class="button add-btn mg-r-10px" @click="activeModalCreate = true">เพิ่ม</div>
         <input class="search-input pd-5px" type="text" v-model="search"  placeholder="คีย์เวิร์ดสำหรับการค้นหา">
       </div>
     </div>
@@ -34,8 +34,8 @@
               {{ props.row.date }}
             </b-table-column>
 
-            <b-table-column field="name" label="จาก - ถึง" :centered="true">
-              {{ props.row.from }} - {{ props.row.to }}
+            <b-table-column field="name" label="จาก" :centered="true">
+              {{ props.row.from }}
             </b-table-column>
 
             <b-table-column field="name" label="ดูข้อมูลเอกสาร" :centered="true">

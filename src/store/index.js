@@ -318,13 +318,11 @@ const actions = {
     await storage.child(`documents/${name}.pdf`).put(payload.file)
     const dowloadUrl = await storage.child(`documents/${name}.pdf`).getDownloadURL()
     const result = await backUpDocumentRef.push({
-      user: payload.user,
       receiveDate: moment(payload.receiveDate).format('DD-MM-YYYY'),
       date: moment(payload.date).format('DD-MM-YYYY'),
       receiveId: payload.receiveId,
       documentId: payload.documentId,
       from: payload.from,
-      to: payload.to,
       name: payload.name,
       work: payload.work,
       dowloadUrl

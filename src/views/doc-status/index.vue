@@ -60,20 +60,38 @@
                       class="cs-pointer"
                       width="20px" height="20px"/>
             </b-table-column>
+            <b-table-column field="name" label="บันทึกเอกสาร" :centered="true" v-if="user.roles === 'admin3'">
+              <svg-filler
+                      :path="`/static/svg/save.svg`"
+                      :fill="'#7d8286'"
+                      class="cs-pointer"
+                      @click="saveDoc(props.row)"
+                      width="20px" height="20px"/>
+              <!-- mail-bulk -->
+            </b-table-column>
           </template>
       </b-table>
     </div>
+    <b-modal :active.sync="activeModalSaveDoc" class="t-al-center">
+      <Create :doc="selectedDoc"/>
+    </b-modal>
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import Create from './CreateSaveDoc'
 export default {
+  components: {
+    Create
+  },
   data () {
     return {
       qr: '',
       selectedFilter: 'ทั้งหมด',
-      showDocument: []
+      showDocument: [],
+      activeModalSaveDoc: false,
+      selectedDoc: {}
     }
   },
   computed: {
@@ -95,6 +113,10 @@ export default {
       setLoading: 'style/setLoading',
       removeDocument: 'removeDocument'
     }),
+    saveDoc (data) {
+      this.activeModalSaveDoc = true
+      this.selectedDoc = data
+    },
     show (data) {
       let msg = ''
       for (let index = 0; index < data.length; index++) {
