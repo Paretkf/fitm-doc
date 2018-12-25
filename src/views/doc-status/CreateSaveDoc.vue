@@ -5,12 +5,24 @@
       <div class="columns">
         <div class="column">
           <b-field label="วันที่ได้รับ*">
-           <b-input v-model="newDocument.receiveDate" placeholder="วันที่ได้รับ" disabled></b-input>
+            <b-datepicker
+              placeholder="เลือกวันที่ได้รับเอกสาร"
+              :month-names="monthNames"
+              :day-names="dayNames"
+              v-model="newDocument.receiveDate"
+              :date-formatter="(date) => { return dateFormat(date) }">
+            </b-datepicker>
           </b-field>
         </div>
         <div class="column">
           <b-field label="ลงวันที่*">
-           <b-input v-model="newDocument.date" placeholder="ลงวันที่" disabled></b-input>
+            <b-datepicker
+              placeholder="ลงวันที่เอกสาร"
+              :month-names="monthNames"
+              :day-names="dayNames"
+              v-model="newDocument.date"
+              :date-formatter="(date) => { return dateFormat(date) }">
+            </b-datepicker>
           </b-field>
         </div>
       </div>
@@ -78,13 +90,14 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { formatDate } from '@/utils/date'
 import moment from 'moment'
 export default {
   props: ['doc'],
   data () {
     return {
-      // monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฏาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤษจิกายน', 'ธันวาคม'],
-      // dayNames: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
+      monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฏาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤษจิกายน', 'ธันวาคม'],
+      dayNames: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
       newDocument: {
         receiveDate: null,
         date: null,
@@ -99,8 +112,8 @@ export default {
     }
   },
   mounted () {
-    this.newDocument.receiveDate = this.doc.receiveDate
-    this.newDocument.date = this.doc.date
+    this.newDocument.receiveDate = formatDate(this.doc.receiveDate)
+    this.newDocument.date = formatDate(this.doc.date)
     this.newDocument.receiveId = this.doc.receiveId
     this.newDocument.documentId = this.doc.documentId
     this.newDocument.from = this.doc.from
