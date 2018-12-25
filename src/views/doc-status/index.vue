@@ -65,6 +65,7 @@
                       :path="`/static/svg/save.svg`"
                       :fill="'#7d8286'"
                       class="cs-pointer"
+                      v-if="props.row.status === 'ติดต่อห้องภาควิชา'"
                       @click="saveDoc(props.row)"
                       width="20px" height="20px"/>
               <!-- mail-bulk -->
