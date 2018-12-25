@@ -44,9 +44,9 @@
       </b-table>
     </div>
     <div v-if="scanQRCodeDocuments[0].status === 'รับเข้า'">
-      <button class="w-60pct button is-info" @click="changeStatusAdmin2()">เสนอคณะบดี</button>
+      <button class="w-60pct button is-info" @click="changeStatusAdmin2()">เสนอคณบดี</button>
     </div>
-    <div v-else-if="scanQRCodeDocuments[0].status === 'เสนอคณะบดี'">
+    <div v-else-if="scanQRCodeDocuments[0].status === 'เสนอคณบดี'">
       <button class="w-60pct button is-info" @click="changeStatusAdmin3()">ติดต่อห้องภาควิชา</button>
     </div>
   </div>
@@ -75,7 +75,7 @@ export default {
     async changeStatusAdmin2 () {
       await this.setLoading(true)
       await this.changeStatusDocument({
-        status: 'เสนอคณะบดี',
+        status: 'เสนอคณบดี',
         data: this.scanQRCodeDocuments
       })
       await this.setLoading(false)
@@ -101,7 +101,7 @@ export default {
     docStatus (status) {
       if (status === 'รับเข้า') {
         return 'is-success'
-      } else if (status === 'เสนอคณะบดี') {
+      } else if (status === 'เสนอคณบดี') {
         return 'is-info'
       } else if (status === 'ติดต่อห้องภาควิชา') {
         return 'is-danger'

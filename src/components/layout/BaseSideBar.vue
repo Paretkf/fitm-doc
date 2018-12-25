@@ -94,97 +94,97 @@ export default {
       ]
     }
   },
-  mounted () {
-    if (this.user.roles === 'admin1') {
-      this.menus = [
-        {
-          link: 'create-doc',
-          page: ['create-doc'],
-          text: 'เพิ่มเอกสาร',
-          icon: 'file'
-        },
-        {
-          link: 'gen-qr',
-          page: ['gen-qr'],
-          text: 'สร้าง QR Code',
-          icon: '2qrcode'
-        },
-        {
-          link: 'document-status',
-          page: ['document-status'],
-          text: 'สถานะเอกสาร',
-          icon: '3Status'
-        }
-      ]
-    } else if (this.user.roles === 'admin2') {
-      this.menus = [
-        {
-          link: 'scan-qr-code',
-          page: ['scan-qr-code'],
-          text: 'สแกน QR Code',
-          icon: '2qrcode'
-        },
-        {
-          link: 'document-status',
-          page: ['document-status'],
-          text: 'สถานะเอกสาร',
-          icon: '3Status'
-        }
-      ]
-    } else if (this.user.roles === 'admin3') {
-      this.menus = [
-        {
-          link: 'scan-qr-code',
-          page: ['scan-qr-code'],
-          text: 'สแกน QR Code',
-          icon: '2qrcode'
-        },
-        {
-          link: 'document-status',
-          page: ['document-status'],
-          text: 'สถานะเอกสาร',
-          icon: '3Status'
-        },
-        {
-          link: 'save-document',
-          page: ['save-document'],
-          text: 'สืบค้นเอกสารย้อนหลัง',
-          icon: '5search'
-        }
-      ]
-    } else if (this.user.roles === 'root') {
-      this.menus = [
-        {
-          link: 'manage-user',
-          page: ['manage-user'],
-          text: 'จัดการผู้ใช้',
-          icon: 'users-solid'
-        },
-        {
-          link: 'document-status',
-          page: ['document-status'],
-          text: 'สถานะเอกสาร',
-          icon: '3Status'
-        }
-      ]
-    } else if (this.user.roles === 'user') {
-      // file-alt-solid
-      this.menus = [
-        {
-          link: 'document-status',
-          page: ['document-status'],
-          text: 'สถานะเอกสาร',
-          icon: '3Status'
-        },
-        {
-          link: 'user-doc',
-          page: ['user-doc'],
-          text: 'เอกสารที่ได้รับ',
-          icon: 'file-alt-solid'
-        }
-      ]
-    }
-  },
+  // mounted () {
+  //   if (this.user.roles === 'admin1') {
+  //     this.menus = [
+  //       {
+  //         link: 'create-doc',
+  //         page: ['create-doc'],
+  //         text: 'เพิ่มเอกสาร',
+  //         icon: 'file'
+  //       },
+  //       {
+  //         link: 'gen-qr',
+  //         page: ['gen-qr'],
+  //         text: 'สร้าง QR Code',
+  //         icon: '2qrcode'
+  //       },
+  //       {
+  //         link: 'document-status',
+  //         page: ['document-status'],
+  //         text: 'สถานะเอกสาร',
+  //         icon: '3Status'
+  //       }
+  //     ]
+  //   } else if (this.user.roles === 'admin2') {
+  //     this.menus = [
+  //       {
+  //         link: 'scan-qr-code',
+  //         page: ['scan-qr-code'],
+  //         text: 'สแกน QR Code',
+  //         icon: '2qrcode'
+  //       },
+  //       {
+  //         link: 'document-status',
+  //         page: ['document-status'],
+  //         text: 'สถานะเอกสาร',
+  //         icon: '3Status'
+  //       }
+  //     ]
+  //   } else if (this.user.roles === 'admin3') {
+  //     this.menus = [
+  //       {
+  //         link: 'scan-qr-code',
+  //         page: ['scan-qr-code'],
+  //         text: 'สแกน QR Code',
+  //         icon: '2qrcode'
+  //       },
+  //       {
+  //         link: 'document-status',
+  //         page: ['document-status'],
+  //         text: 'สถานะเอกสาร',
+  //         icon: '3Status'
+  //       },
+  //       {
+  //         link: 'save-document',
+  //         page: ['save-document'],
+  //         text: 'สืบค้นเอกสารย้อนหลัง',
+  //         icon: '5search'
+  //       }
+  //     ]
+  //   } else if (this.user.roles === 'root') {
+  //     this.menus = [
+  //       {
+  //         link: 'manage-user',
+  //         page: ['manage-user'],
+  //         text: 'จัดการผู้ใช้',
+  //         icon: 'users-solid'
+  //       },
+  //       {
+  //         link: 'document-status',
+  //         page: ['document-status'],
+  //         text: 'สถานะเอกสาร',
+  //         icon: '3Status'
+  //       }
+  //     ]
+  //   } else if (this.user.roles === 'user') {
+  //     // file-alt-solid
+  //     this.menus = [
+  //       {
+  //         link: 'document-status',
+  //         page: ['document-status'],
+  //         text: 'สถานะเอกสาร',
+  //         icon: '3Status'
+  //       },
+  //       {
+  //         link: 'user-doc',
+  //         page: ['user-doc'],
+  //         text: 'เอกสารที่ได้รับ',
+  //         icon: 'file-alt-solid'
+  //       }
+  //     ]
+  //   }
+  // },
   computed: {
     ...mapState({
       user: state => state.user

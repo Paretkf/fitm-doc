@@ -58,7 +58,7 @@
     <b-modal :active.sync="activeModalCreate" class="t-al-center">
       <Create/>
     </b-modal>
-      <b-modal :active.sync="activeModalSendDoc" class="t-al-center">
+    <b-modal :active.sync="activeModalSendDoc" class="t-al-center">
       <SendDocument :document="selectedDoc"/>
     </b-modal>
   </div>

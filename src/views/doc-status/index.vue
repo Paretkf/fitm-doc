@@ -4,34 +4,46 @@
       <div>
         <span class="page-title is-paddingless is-marginless"> สถานะเอกสาร </span>
       </div>
+      <div>
+        <b-select placeholder="เลือกสถานะ" v-model="selectedFilter">
+          <option :value="'ทั้งหมด'">ทั้งหมด</option>
+          <option :value="'รับเข้า'">รับเข้า</option>
+          <option :value="'เสนอคณบดี'">เสนอคณบดี</option>
+          <option :value="'ติดต่อห้องภาควิชา'">ติดต่อห้องภาควิชา</option>
+        </b-select>
+      </div>
     </div>
     <div class="form t-al-left">
-      <b-table class="f-s-16px"
-              :data="documents"
+      <b-table class="f-s-14px"
+              :data="filteredDocument"
               :paginated="true"
               :per-page="10"
               :narrowed="true"
               :pagination-simple="false"
               hoverable>
           <template slot-scope="props">
-            <b-table-column field="reveiveId" label="ลำดับ" :centered="true">
+            <b-table-column field="index" label="ลำดับ" :centered="true">
               {{ props.index + 1 }}
             </b-table-column>
 
-            <b-table-column field="reveiveId" label="เลขที่ได้รับ" :centered="true">
+            <b-table-column field="receiveId" label="เลขที่ได้รับ" :centered="true" sortable>
               {{ props.row.receiveId }}
             </b-table-column>
 
-            <b-table-column field="name" label="เรื่อง" :centered="true">
+            <b-table-column field="name" label="เรื่อง" :centered="true" sortable>
               {{ props.row.name }}
             </b-table-column>
 
-             <b-table-column field="name" label="วันที่ได้รับ" :centered="true">
+             <b-table-column field="receiveDate" label="วันที่ได้รับ" :centered="true" sortable>
               {{ props.row.receiveDate }}
             </b-table-column>
 
-            <b-table-column field="name" label="จาก - ถึง" :centered="true">
-              {{ props.row.from }} - {{ props.row.to }}
+            <b-table-column field="from" label="จาก - ถึง" :centered="true" v-if="user.roles !== 'user'">
+              {{ props.row.from }} - <li class="tag is-dark cs-pointer" @click="show(props.row.to)">{{ props.row.to.length }}</li>
+            </b-table-column>
+
+            <b-table-column field="from" label="จาก" :centered="true" v-else>
+              {{ props.row.from }}
             </b-table-column>
 
             <b-table-column field="name" label="สถานะ" :centered="true">
@@ -59,14 +71,23 @@ import { mapActions, mapState } from 'vuex'
 export default {
   data () {
     return {
-      qr: ''
+      qr: '',
+      selectedFilter: 'ทั้งหมด',
+      showDocument: []
     }
   },
   computed: {
     ...mapState({
       documents: state => state.documents,
       user: state => state.user
-    })
+    }),
+    filteredDocument () {
+      if (this.selectedFilter !== 'ทั้งหมด') {
+        return this.showDocument.filter(doc => doc.status === this.selectedFilter)
+      } else {
+        return this.showDocument
+      }
+    }
   },
   methods: {
     ...mapActions({
@@ -74,10 +95,31 @@ export default {
       setLoading: 'style/setLoading',
       removeDocument: 'removeDocument'
     }),
+    show (data) {
+      let msg = ''
+      for (let index = 0; index < data.length; index++) {
+        msg += `<b>${index + 1}. ${data[index].name}</b><br> (${data[index].email})<br>`
+      }
+      this.$dialog.alert({
+        message: msg,
+        type: 'is-info'
+      })
+    },
+    checkUser (c) {
+      if (this.user.roles === 'user') {
+        if (c.to.findIndex(d => d === this.user.email) === -1) {
+          return false
+        } else {
+          return true
+        }
+      } else {
+        return true
+      }
+    },
     docStatus (status) {
       if (status === 'รับเข้า') {
         return 'is-success'
-      } else if (status === 'เสนอคณะบดี') {
+      } else if (status === 'เสนอคณบดี') {
         return 'is-info'
       } else if (status === 'ติดต่อห้องภาควิชา') {
         return 'is-danger'
@@ -108,6 +150,11 @@ export default {
   async mounted () {
     await this.setLoading(true)
     await this.getDocuments()
+    if (this.user.roles === 'user') {
+      this.showDocument = this.documents.filter(c => c.to.findIndex(d => d.email === this.user.email) !== -1)
+    } else {
+      this.showDocument = this.documents
+    }
     await this.setLoading(false)
   }
 }

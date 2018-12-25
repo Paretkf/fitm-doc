@@ -45,9 +45,9 @@ export default {
     })
   },
   mounted () {
-    if (!this.user.uid) {
-      this.$router.push({ name: 'login' })
-    }
+    // if (!this.user.uid) {
+    //   this.$router.push({ name: 'login' })
+    // }
   }
 }
 </script>

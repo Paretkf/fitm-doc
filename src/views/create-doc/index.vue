@@ -71,20 +71,19 @@
             </b-autocomplete>
           </b-field>
         </div>
+      </div>
+      <div class="columns">
         <div class="column">
-          <b-field label="ถึง*">
-           <!-- <b-input v-model="newDocument.to" placeholder="ถึง"></b-input> -->
-           <b-autocomplete
-                v-model="newDocument.to"
-                :data="filteredToArray"
-                placeholder="ถึง"
-                @select="option => selected = option">
-                {{filteredToArray}}
-            </b-autocomplete>
-          </b-field>
+          <div class="mg-bt-8px">
+            <a class="cl-info" @click="activeModalSendDoc = true">เลือกผู้ใช้ที่ต้องการส่งถึง*</a>
+          </div>
+          <ul>
+            <li v-for="(data, index) in checkedRows" :key="data.firebaseId">
+              {{index + 1}}. {{data.displayName}} ({{data.email}})
+            </li>
+          </ul>
         </div>
       </div>
-
       <div class="columns">
         <div class="column">
           <b-field label="เรื่อง*">
@@ -145,16 +144,25 @@
          <button class="button is-info w-60pct mg-auto" @click="add()">เพิ่มข้อมูล</button>
         </div>
       </div>
+      <b-modal :active.sync="activeModalSendDoc" class="t-al-center">
+        <SendDocument @onConfirmUser="confirmUser"/>
+      </b-modal>
     </div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import SendDocument from './SendDocument'
 import moment from 'moment'
 export default {
+  components: {
+    SendDocument
+  },
   data () {
     return {
+      checkedRows: [],
+      activeModalSendDoc: false,
       monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฏาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤษจิกายน', 'ธันวาคม'],
       dayNames: ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'],
       newDocument: {
@@ -164,7 +172,7 @@ export default {
         receiveId: '',
         documentId: '',
         from: '',
-        to: '',
+        to: [],
         name: '',
         work: '',
         status: 'รับเข้า',
@@ -178,10 +186,16 @@ export default {
       getDocuments: 'getDocuments',
       setLoading: 'style/setLoading'
     }),
+    confirmUser (value) {
+      this.checkedRows = value
+    },
     dateFormat (date) {
       return moment(date).format('DD-MM-YYYY')
     },
     async add () {
+      if (this.checkedRows.length !== 0) {
+        this.newDocument.to = this.checkedRows.map(row => { return {email: row.email, name: row.displayName} })
+      }
       const isvalid = this.validateData()
       if (!isvalid) {
         return
@@ -190,7 +204,7 @@ export default {
       await this.createDocument(this.newDocument)
       await this.getDocuments()
       await this.setLoading(false)
-      this.$swal({
+      await this.$swal({
         type: 'success',
         title: 'สำเร็จ',
         text: 'เพิ่มข้อมูลสำเร็จ'
@@ -250,19 +264,19 @@ export default {
         })
         return false
       }
+      if (this.newDocument.to.length === 0) {
+        this.$swal({
+          type: 'error',
+          title: 'เกิดข้อผิดพลาด',
+          text: 'เลิกผู้ใช้ที่ต้องการส่งถึง'
+        })
+        return false
+      }
       if (this.newDocument.name === '') {
         this.$swal({
           type: 'error',
           title: 'เกิดข้อผิดพลาด',
           text: 'กรุณาเพิ่มชื่อ เรื่อง เอกสาร'
-        })
-        return false
-      }
-      if (this.newDocument.to === '') {
-        this.$swal({
-          type: 'error',
-          title: 'เกิดข้อผิดพลาด',
-          text: 'เพิ่มฟิลด์นี้ (ถึง)'
         })
         return false
       }
