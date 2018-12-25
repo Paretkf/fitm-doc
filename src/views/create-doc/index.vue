@@ -209,6 +209,7 @@ export default {
         title: 'สำเร็จ',
         text: 'เพิ่มข้อมูลสำเร็จ'
       })
+      this.checkedRows = []
       this.newDocument = {
         user: '',
         receiveDate: null,
@@ -216,7 +217,7 @@ export default {
         receiveId: '',
         documentId: '',
         from: '',
-        to: '',
+        to: [],
         name: '',
         work: '',
         status: 'รับเข้า',

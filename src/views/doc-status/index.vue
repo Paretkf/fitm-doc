@@ -152,7 +152,7 @@ export default {
       await this.removeDocument(data)
       await this.getDocuments()
       await this.setLoading(false)
-      this.$swal({
+      await this.$swal({
         type: 'success',
         title: 'สำเร็จ',
         text: 'ลบข้อมูลสำเร็จ'
