@@ -210,9 +210,10 @@ const actions = {
     }
     try {
       let result = await firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
+      const userName = result.user.email.split('@')
       let userData = {
         uid: result.user.uid,
-        displayName: result.user.displayName,
+        displayName: result.user.displayName ? result.user.displayName : userName[0],
         email: result.user.email,
         photoURL: result.user.photoURL,
         roles: 'user'
