@@ -124,7 +124,8 @@ export default {
     ...mapActions({
       createSaveDocument: 'createSaveDocument',
       getBackUpDocuments: 'getBackUpDocuments',
-      setLoading: 'style/setLoading'
+      setLoading: 'style/setLoading',
+      mapDocUser: 'mapDocUser'
     }),
     dateFormat (date) {
       return moment(date).format('DD-MM-YYYY')
@@ -135,7 +136,11 @@ export default {
         return
       }
       this.setLoading(true)
-      await this.createSaveDocument(this.newDocument)
+      const result = await this.createSaveDocument(this.newDocument)
+      await this.mapDocUser({
+        user: this.doc.to,
+        firebaseId: result.key
+      })
       await this.getBackUpDocuments()
       this.setLoading(false)
       await this.$swal({
@@ -143,6 +148,7 @@ export default {
         title: 'สำเร็จ',
         text: 'เพิ่มข้อมูลสำเร็จ'
       })
+      await this.$parent.close()
       this.newDocument = {
         user: '',
         receiveDate: null,

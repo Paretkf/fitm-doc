@@ -315,6 +315,23 @@ const actions = {
     const result = await userRef.child(payload).remove()
     return result
   },
+  async mapDocUser ({commit}, payload) {
+    let result = {
+      backUpDocumentRef: {},
+      userRef: []
+    }
+    let userEmail = payload.user.map(u => u.email)
+    const temp = await backUpDocumentRef.child(payload.firebaseId).once('value')
+    const doc = temp.val()
+    if (doc !== null) {
+      for (let i = 0; i < payload.user.length; i++) {
+        let tem = await userRef.child(`${payload.user[i].firebaseId}/documents`).push(doc)
+        result.userRef.push(tem)
+      }
+    }
+    result.backUpDocumentRef = await backUpDocumentRef.child(`${payload.firebaseId}/users`).set(userEmail)
+    return result
+  },
   async createSaveDocument ({ commit }, payload) {
     const message = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz'
     let name = ''

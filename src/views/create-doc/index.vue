@@ -194,7 +194,7 @@ export default {
     },
     async add () {
       if (this.checkedRows.length !== 0) {
-        this.newDocument.to = this.checkedRows.map(row => { return {email: row.email, name: row.displayName} })
+        this.newDocument.to = this.checkedRows.map(row => { return {email: row.email, name: row.displayName, firebaseId: row.firebaseId} })
       }
       const isvalid = this.validateData()
       if (!isvalid) {
