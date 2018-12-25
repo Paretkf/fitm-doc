@@ -208,6 +208,14 @@ export default {
         })
         return false
       }
+      if (this.newDocument.name === '') {
+        this.$swal({
+          type: 'error',
+          title: 'เกิดข้อผิดพลาด',
+          text: 'กรุณาเพิ่มชื่อ เรื่อง เอกสาร'
+        })
+        return false
+      }
       return true
     }
   }
