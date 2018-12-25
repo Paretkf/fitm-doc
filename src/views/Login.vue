@@ -13,11 +13,11 @@
       <div class="dp-flex f-drt-column pd-20px">
         <div class="pd-10px">
           <span>อีเมล* </span>
-          <input type="text" class="input" v-model="userLogin.email" placeholder="กรุณาระบุอีเมล">
+          <input type="text" class="input" v-model="userLogin.email" placeholder="กรุณาระบุอีเมล" @keydown.enter="sendLogin()">
         </div>
         <div class="pd-10px">
           <span>รหัสผ่าน* </span>
-          <input type="password" class="input" v-model="userLogin.password" placeholder="กรุณาระบุรหัสผ่าน">
+          <input type="password" class="input" v-model="userLogin.password" @keydown.enter="sendLogin()" placeholder="กรุณาระบุรหัสผ่าน">
         </div>
         <div class="pd-5px t-al-right">
           <a class="mg-r-20px cl-danger" @click="forgot()">ลืมรหัสผ่าน*</a>

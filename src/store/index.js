@@ -127,7 +127,6 @@ const actions = {
     return result
   },
   async changeRoles ({commit}, payload) {
-    console.log('payload', payload)
     if (payload.roles !== 'user') {
       const temp = await userRef.orderByChild('roles').equalTo(payload.roles).once('value')
       const userResult = temp.val()
