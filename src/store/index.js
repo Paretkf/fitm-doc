@@ -238,9 +238,10 @@ const actions = {
   },
   loginWithGoogle ({commit}) {
     firebase.auth().signInWithPopup(provider).then(async (result) => {
+      const userName = result.user.email.split('@')
       let userData = {
         uid: result.user.uid,
-        displayName: result.user.displayName,
+        displayName: result.user.displayName ? result.user.displayName : userName[0],
         email: result.user.email,
         photoURL: result.user.photoURL,
         roles: 'user'
