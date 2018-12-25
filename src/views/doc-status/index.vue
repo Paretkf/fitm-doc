@@ -152,6 +152,7 @@ export default {
       await this.setLoading(true)
       await this.removeDocument(data)
       await this.getDocuments()
+      this.showDocument = this.documents
       await this.setLoading(false)
       await this.$swal({
         type: 'success',
