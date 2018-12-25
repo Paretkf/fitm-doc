@@ -31,7 +31,7 @@
             </b-table-column>
 
             <b-table-column field="name" label="จาก - ถึง" :centered="true">
-              {{ props.row.from }} - {{ props.row.to }}
+              {{ props.row.from }} - <li class="tag is-dark cs-pointer" @click="show(props.row.to)">{{ props.row.to.length }}</li>
             </b-table-column>
 
             <b-table-column field="name" label="สถานะ" :centered="true">
@@ -97,6 +97,16 @@ export default {
         title: 'สำเร็จ'
       })
       this.$router.push({ name: 'document-status' })
+    },
+    show (data) {
+      let msg = ''
+      for (let index = 0; index < data.length; index++) {
+        msg += `<b>${index + 1}. ${data[index].name}</b><br> (${data[index].email})<br>`
+      }
+      this.$dialog.alert({
+        message: msg,
+        type: 'is-info'
+      })
     },
     docStatus (status) {
       if (status === 'รับเข้า') {
