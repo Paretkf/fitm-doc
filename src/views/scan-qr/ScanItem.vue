@@ -64,10 +64,11 @@ export default {
   computed: {
     ...mapState({
       scanQRCodeDocuments: state => state.scanQRCodeDocuments,
-      user: state => state => state.user
+      user: state => state.user
     })
   },
   mounted () {
+    console.log(this.user, this.scanQRCodeDocuments[0].status)
     if (this.scanQRCodeDocuments.length <= 0) {
       this.$swal({
         type: 'error',
@@ -91,6 +92,11 @@ export default {
         text: 'ไม่พบเอกสาร'
       })
       this.$router.push({ name: 'scan-qr-code' })
+    } else {
+      this.$swal({
+        type: 'success',
+        title: 'สำเร็จ'
+      })
     }
   },
   methods: {

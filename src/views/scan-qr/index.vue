@@ -30,10 +30,6 @@ export default {
     }),
     async onDecode (content) {
       if (content) {
-        this.$swal({
-          type: 'success',
-          title: 'สำเร็จ'
-        })
         this.playSound()
         await this.setLoading(true)
         await this.getScanQRCodeDocuments(content)
