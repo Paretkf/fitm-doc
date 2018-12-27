@@ -158,7 +158,6 @@ const actions = {
   },
   async getUserDocument ({ commit, state }) {
     const snapshot = await userRef.child(`${state.user.firebaseId}/documents`).once('value')
-    console.log(state.user.firebaseId)
     const rawData = snapshot.val()
     let data = []
     for (const key in rawData) {

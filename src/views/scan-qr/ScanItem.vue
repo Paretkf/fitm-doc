@@ -63,12 +63,38 @@ export default {
   },
   computed: {
     ...mapState({
-      scanQRCodeDocuments: state => state.scanQRCodeDocuments
+      scanQRCodeDocuments: state => state.scanQRCodeDocuments,
+      user: state => state => state.user
     })
+  },
+  mounted () {
+    if (this.scanQRCodeDocuments.length <= 0) {
+      this.$swal({
+        type: 'error',
+        title: 'เกิดข้อผิดพลาด',
+        text: 'ไม่พบเอกสาร'
+      })
+      this.$router.push({ name: 'scan-qr-code' })
+    }
+    if (this.user.roles === 'admin2' && this.scanQRCodeDocuments[0].status !== 'รับเข้า') {
+      this.$swal({
+        type: 'error',
+        title: 'เกิดข้อผิดพลาด',
+        text: 'ไม่พบเอกสาร'
+      })
+      this.$router.push({ name: 'scan-qr-code' })
+    }
+    if (this.user.roles === 'admin3' && this.scanQRCodeDocuments[0].status !== 'เสนอคณบดี') {
+      this.$swal({
+        type: 'error',
+        title: 'เกิดข้อผิดพลาด',
+        text: 'ไม่พบเอกสาร'
+      })
+      this.$router.push({ name: 'scan-qr-code' })
+    }
   },
   methods: {
     ...mapActions({
-      getScanQRCodeDocuments: 'getScanQRCodeDocuments',
       setLoading: 'style/setLoading',
       changeStatusDocument: 'changeStatusDocument'
     }),
